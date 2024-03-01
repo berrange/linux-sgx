@@ -114,7 +114,7 @@ $(TARGET): PREPARE_SGX_SSL
 else
 
 $(TARGET): $(OBJ) $(SHARED_OBJ) $(C_OBJS)
-	$(CP) $(IPP_LIBS_DIR)/libippcp.a $(LIB_NAME)
+	$(CP) $(IPP_LIBS_DIR)/libsgx_ippcp.a $(LIB_NAME)
 	$(AR) rsD $(LIB_NAME) $(OBJ) $(SHARED_OBJ) $(C_OBJS)
 	$(CP) $(LIB_NAME) $@
 
