@@ -57,7 +57,7 @@ INCLUDE += -I$(COMMON_DIR)/inc/tlibc    \
            -I$(SGX_QV_PATH)/../QuoteGeneration/pce_wrapper/inc \
            -I$(SGX_QV_PATH)/dcap_tvl \
            -include./tsgxsslio.h \
-           -I$(CBOR_PATH)/trusted/include
+           -I$(SGX_SDK)/include
 INCLUDE_TDX := $(INCLUDE)
 
 INCLUDE += $(shell pkg-config --cflags libcrypto)
@@ -75,8 +75,6 @@ OBJ_TDX := $(addprefix tdx_, $(OBJ))
 
 LIBSGX_CBOR = libsgx_cbor.a
 LIBCBOR = libcbor.a
-LIBSGX_CBOR_PATH = $(CBOR_PATH)/trusted/lib
-LIBCBOR_PATH = $(CBOR_PATH)/untrusted/lib
 
 LIBNAME := libsgx_ttls.a
 LIBNAME_TDX := libtdx_tls.a
@@ -96,28 +94,22 @@ $(EDGER8R):
 $(LIBNAME): $(OBJ)
 	$(AR) rs $@ $(OBJ)
 	$(MKDIR) $(BUILD_DIR)/.libsgx_cbor
-	$(RM) $(BUILD_DIR)/.libsgx_cbor/* && cd $(BUILD_DIR)/.libsgx_cbor && $(AR) x $(LIBSGX_CBOR_PATH)/$(LIBSGX_CBOR)
+	$(RM) $(BUILD_DIR)/.libsgx_cbor/* && cd $(BUILD_DIR)/.libsgx_cbor && $(AR) x $(LIBSGX_CBOR)
 	$(AR) rs $@ $(BUILD_DIR)/.libsgx_cbor/*.o
 	@$(RM) -r $(BUILD_DIR)/.libsgx_cbor
 
 $(LIBNAME_TDX): $(OBJ_TDX)
 	$(AR) rs $@ $(OBJ_TDX)
 	$(MKDIR) $(BUILD_DIR)/.libcbor
-	$(RM) $(BUILD_DIR)/.libcbor/* && cd $(BUILD_DIR)/.libcbor && $(AR) x $(LIBCBOR_PATH)/$(LIBCBOR)
+	$(RM) $(BUILD_DIR)/.libcbor/* && cd $(BUILD_DIR)/.libcbor && $(AR) x $(LIBCBOR)
 	$(AR) rs $@ $(BUILD_DIR)/.libcbor/*.o
 	@$(RM) -r $(BUILD_DIR)/.libcbor
 
 $(OBJ): $(TLSNAME)_t.h 
-$(OBJ): %.o :%.cpp $(LIBSGX_CBOR)
+$(OBJ): %.o :%.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE)  -c $< -o $@
-$(OBJ_TDX): tdx_%.o :%.cpp $(LIBCBOR)
+$(OBJ_TDX): tdx_%.o :%.cpp
 	$(CXX) $(CXXFLAGS_TDX) $(INCLUDE_TDX) -DTDX_ENV -c $< -o $@
-
-$(LIBSGX_CBOR):
-	@test -f $(LIBSGX_CBOR_PATH)/$(LIBSGX_CBOR) || $(MAKE) -C $(CBOR_RELATIVE_PATH) cbor_trusted 
-
-$(LIBCBOR):
-	@test -f $(LIBCBOR_PATH)/$(LIBCBOR) || $(MAKE) -C $(CBOR_RELATIVE_PATH) cbor_untrusted
 
 .PHONY: clean
 clean:
@@ -127,7 +119,6 @@ clean:
 	@$(RM) $(LIBNAME) $(BUILD_DIR)/$(LIBNAME)
 	@$(RM) $(LIBNAME_TDX) $(BUILD_DIR)/$(LIBNAME_TDX)
 	$(MAKE) -C $(EDGER8R_DIR) clean
-	$(MAKE) -C $(CBOR_PATH) clean
 
 .PHONY: rebuild
 rebuild:

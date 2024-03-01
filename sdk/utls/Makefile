@@ -34,15 +34,13 @@ include $(TOP_DIR)/buildenv.mk
 
 CERT_UTIL_DIR   := ../ttls
 SGX_QV_PATH ?= ../../external/dcap_source/QuoteVerification
-CBOR_PATH ?= $(LINUX_EXTERNAL_DIR)/cbor
-LIBCBOR_PATH ?= $(CBOR_PATH)/untrusted/lib
 
 INCLUDE += -I.
 INCLUDE += -I$(COMMON_DIR)              \
            -I$(COMMON_DIR)/inc          \
            -I$(COMMON_DIR)/inc/internal \
            $(shell pkg-config --cflags libcrypto) \
-           -I$(CBOR_PATH)/untrusted/include \
+           $(pkg-config --cflags libcbor) \
            -I$(CERT_UTIL_DIR) \
            -I$(SGX_QV_PATH)/QvE/Include \
            -I$(SGX_QV_PATH)/dcap_quoteverify/inc \
@@ -75,24 +73,20 @@ all: $(LIBNAME) | $(BUILD_DIR)
 $(LIBNAME): $(OBJ) $(CERT_OBJ)
 	$(AR) rs $@ $(OBJ) $(CERT_OBJ)
 	$(MKDIR) $(BUILD_DIR)/.libcbor
-	$(RM) $(BUILD_DIR)/.libcbor/* && cd $(BUILD_DIR)/.libcbor && $(AR) x $(LIBCBOR_PATH)/$(LIBCBOR)
+	$(RM) $(BUILD_DIR)/.libcbor/* && cd $(BUILD_DIR)/.libcbor && $(AR) x $(LIBCBOR)
 	$(AR) rs $@ $(BUILD_DIR)/.libcbor/*.o
 	@$(RM) -r $(BUILD_DIR)/.libcbor
 
-$(OBJ): $(LIBCBOR) $(SRC)
+$(OBJ): $(SRC)
 	$(CXX) $(CXXFLAGS) -Wno-deprecated-declarations $(INCLUDE) -c $(SRC) -o $@
 
 $(CERT_OBJ): $(HOST_CERT_SRC)
 	$(CXX) $(CXXFLAGS) -Wno-deprecated-declarations $(INCLUDE) -c $< -o $@
 
-$(LIBCBOR):
-	@test -f $(LIBCBOR_PATH)/$(LIBCBOR) || $(MAKE) -C $(CBOR_PATH) cbor_untrusted
-
 .PHONY: clean
 clean:
 	@$(RM) $(OBJ) $(CERT_OBJ)
 	@$(RM) $(LIBNAME) $(BUILD_DIR)/$(LIBNAME)
-	$(MAKE) -C $(CBOR_PATH) clean
 
 .PHONY: rebuild
 rebuild:
