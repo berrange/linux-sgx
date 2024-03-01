@@ -53,6 +53,9 @@ int is_edmm_supported = 0;
 size_t heap_min_size = 0;
 #endif
 
+extern int mm_commit(void* addr, size_t size);
+extern int mm_uncommit(void* addr, size_t size);
+
 int heap_init(void *_heap_base, size_t _heap_size, size_t _heap_min_size, int _is_edmm_supported)
 {
     if (heap_base != NULL)
