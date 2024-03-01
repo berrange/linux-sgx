@@ -44,7 +44,6 @@ else
 endif
 
 SGX_QV_PATH ?= ../../external/dcap_source/QuoteVerification
-PREBUILT_OPENSSL_PATH ?= $(SGX_QV_PATH)/../prebuilt/openssl
 CBOR_PATH ?= $(LINUX_EXTERNAL_DIR)/cbor
 CBOR_RELATIVE_PATH ?= ../../external/cbor
 
@@ -58,9 +57,10 @@ INCLUDE += -I$(COMMON_DIR)/inc/tlibc    \
            -I$(SGX_QV_PATH)/../QuoteGeneration/pce_wrapper/inc \
            -I$(SGX_QV_PATH)/dcap_tvl \
            -include./tsgxsslio.h \
-           -I$(PREBUILT_OPENSSL_PATH)/inc \
            -I$(CBOR_PATH)/trusted/include
-INCLUDE_TDX := $(filter-out -I$(PREBUILT_OPENSSL_PATH)/inc,$(INCLUDE))
+INCLUDE_TDX := $(INCLUDE)
+
+INCLUDE += $(shell pkg-config --cflags libcrypto)
 
 CXXFLAGS_TDX := $(CXXFLAGS) $(COMMON_FLAGS) $(COMMON_LDFLAGS) -fPIC -Werror -Wno-unused-parameter -g
 CXXFLAGS += $(COMMON_FLAGS) $(ENCLAVE_CXXFLAGS)
