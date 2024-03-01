@@ -29,7 +29,7 @@
 #
 #
 
-set(qe3_logic "${CMAKE_SOURCE_DIR}/../../../../external/dcap_source/QuoteGeneration/build/linux/libsgx_qe3_logic.so")
+set(qe3_logic "/usr/lib64/libsgx_qe3_logic.so")
 get_filename_component(bundle ${CMAKE_CURRENT_SOURCE_DIR} NAME)
 aux_source_directory(. _src)
 link_directories(${CMAKE_SOURCE_DIR}/../../../../build/linux
