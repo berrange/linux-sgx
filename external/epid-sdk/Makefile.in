@@ -17,7 +17,7 @@ TINY = @TINY@
 SIZE_CFLAGS := -O2
 
 #gcc flags
-CC_FLAGS := $(CFLAGS) $(SIZE_CFLAGS) -Werror -Wall -Wextra -Wno-missing-braces \
+CC_FLAGS := $(CFLAGS) $(SIZE_CFLAGS) -Wall -Wextra -Wno-missing-braces \
 	-Wno-missing-field-initializers -Wno-unknown-pragmas -Wno-unused-function \
 	-fno-strict-aliasing -Wno-unused-but-set-variable -Wno-comment -Wformat \
 	-Wformat-security -fstack-protector -DNDEBUG -D_FORTIFY_SOURCE=2 $(MITIGATION_CFLAGS)
