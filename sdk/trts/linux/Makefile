@@ -66,20 +66,15 @@ OBJS      += $(ASM_SRCS:.S=.o)
 OBJS      := $(sort $(OBJS))
 
 LIBTRTS = libsgx_trts.a
-LIBSGX_MM_PATH = $(LINUX_EXTERNAL_DIR)/sgx-emm
-LIBSGX_MM = libsgx_mm.a
 
 .PHONY: all
 all: $(LIBTRTS) | $(BUILD_DIR)
 	$(CP) $(LIBTRTS) $|
 
-$(LIBSGX_MM):
-	$(MAKE) -C $(LIBSGX_MM_PATH)
-
-$(LIBTRTS): $(OBJS) $(LIBSGX_MM)
+$(LIBTRTS): $(OBJS)
 	$(AR) rsD $@ $(OBJS) 
 	$(MKDIR) $(BUILD_DIR)/.libsgx_mm
-	$(RM) $(BUILD_DIR)/.libsgx_mm/* && cd $(BUILD_DIR)/.libsgx_mm && $(AR) x $(LIBSGX_MM_PATH)/libsgx_mm.a
+	$(RM) $(BUILD_DIR)/.libsgx_mm/* && cd $(BUILD_DIR)/.libsgx_mm && $(AR) x $(SGX_SDK)/lib64/libsgx_mm.a
 	$(AR) rsD $@ $(BUILD_DIR)/.libsgx_mm/*.o
 	@$(RM) -rf $(BUILD_DIR)/.libsgx_mm
 
@@ -99,7 +94,6 @@ $(BUILD_DIR):
 .PHONY: clean
 clean:
 	@$(RM) $(OBJS) $(LIBTRTS) $(BUILD_DIR)/$(LIBTRTS) 
-	@$(MAKE) -C $(LIBSGX_MM_PATH) clean
 
 .PHONY: rebuild
 rebuild:
