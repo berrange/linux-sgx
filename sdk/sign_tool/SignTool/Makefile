@@ -42,8 +42,7 @@ CFLAGS += $(FLAGS)
 CXXFLAGS += $(FLAGS)
 LDFLAGS := -pie $(COMMON_LDFLAGS) -Wno-odr
 
-PREBUILT_OPENSSL_DIR := $(LINUX_EXTERNAL_DIR)/dcap_source/prebuilt/openssl
-CRYPTO_LIB := -L$(PREBUILT_OPENSSL_DIR)/lib/linux64 -lcrypto
+CRYPTO_LIB = $(shell pkg-config --libs libcrypto tinyxml2)
 
 INC += $(ADDED_INC)
 INC +=  -I$(COMMON_DIR)/inc                         \
@@ -52,11 +51,9 @@ INC +=  -I$(COMMON_DIR)/inc                         \
         -I$(LINUX_PSW_DIR)/enclave_common           \
         -I$(LINUX_PSW_DIR)/urts                     \
         -I$(LINUX_PSW_DIR)/urts/linux               \
-        -I$(LINUX_EXTERNAL_DIR)/tinyxml2            \
         -I$(LINUX_PSW_DIR)/urts/parser              \
-        -I$(PREBUILT_OPENSSL_DIR)/inc
+        $(shell pkg-config --cflags libcrypto tinyxml2)
 
-DIR1 := $(LINUX_EXTERNAL_DIR)/tinyxml2/
 DIR2 := $(COMMON_DIR)/src/
 DIR3 := $(LINUX_PSW_DIR)/urts/
 DIR4 := $(LINUX_PSW_DIR)/urts/linux
@@ -71,16 +68,14 @@ OBJ1 := manage_metadata.o      \
 
 OBJ2 := sgx_memset_s.o crypto_evp_digest.o
 
-OBJ3 := tinyxml2.o
-
 OBJ4 := loader.o     \
         se_detect.o  
 
-CPP_OBJS := $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4)
+CPP_OBJS := $(OBJ1) $(OBJ2) $(OBJ4)
 C_OBJS   := se_trace.o se_map.o
 OBJS     := $(CPP_OBJS) $(C_OBJS)
 
-vpath %.cpp $(DIR1):$(DIR2):$(DIR3):$(DIR4):$(DIR5):$(DIR6)
+vpath %.cpp $(DIR2):$(DIR3):$(DIR4):$(DIR5):$(DIR6)
 
 .PHONY: all
 all: sgx_sign | $(BUILD_DIR)
