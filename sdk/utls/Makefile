@@ -41,12 +41,7 @@ INCLUDE += -I$(COMMON_DIR)              \
            -I$(COMMON_DIR)/inc/internal \
            $(shell pkg-config --cflags libcrypto) \
            $(pkg-config --cflags libcbor) \
-           -I$(CERT_UTIL_DIR) \
-           -I$(SGX_QV_PATH)/QvE/Include \
-           -I$(SGX_QV_PATH)/dcap_quoteverify/inc \
-           -I$(SGX_QV_PATH)/../QuoteGeneration/quote_wrapper/common/inc \
-           -I$(SGX_QV_PATH)/../QuoteGeneration/quote_wrapper/ql/inc \
-		   -I$(SGX_QV_PATH)/../QuoteGeneration/pce_wrapper/inc
+           -I$(CERT_UTIL_DIR) -I$(SGX_SDK)/include
 
 
 CXXFLAGS += $(COMMON_FLAGS) $(COMMON_LDFLAGS) -fPIC -Werror -Wno-unused-parameter -g
