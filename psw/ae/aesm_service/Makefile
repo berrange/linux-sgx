@@ -32,10 +32,7 @@
 TOP_DIR  = ../../..
 include $(TOP_DIR)/buildenv.mk
 
-CPPMICROSERVICES_DIR := $(LINUX_EXTERNAL_DIR)/CppMicroServices
-CPPMICROSERVICES_INSTALL := $(CPPMICROSERVICES_DIR)/local-install
 AESM_CONFIG := -DBUILD_SHARED_LIBS=ON -DUS_BUILD_SHARED_LIBS=ON
-CPPMICROSERVICES_CONFIG := -DCMAKE_INSTALL_PREFIX=$(CPPMICROSERVICES_INSTALL) -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_C_FLAGS= -DCMAKE_CXX_FLAGS=
 ifdef DEBUG
     AESM_CONFIG += -DCMAKE_BUILD_TYPE=Debug
 else
@@ -63,7 +60,6 @@ CFLAGS := $(filter-out -Werror, $(CFLAGS))
 
 WHITE_LIST_FILE := $(LINUX_PSW_DIR)/ae/data/prebuilt/white_list_cert_to_be_verify.bin
 APPNAME         := source/build/bin/aesm_service
-CPPMICROSERVICES:= $(CPPMICROSERVICES_DIR)/build/lib/libCppMicroServices.so.4.0.0
 RDRAND_LIBDIR :=$(LINUX_EXTERNAL_DIR)/rdrand/src
 RDRAND_MAKEFILE := $(RDRAND_LIBDIR)/Makefile
 
@@ -75,26 +71,15 @@ copy_data_file:
 	@$(MKDIR) -p data
 	@$(CP) $(WHITE_LIST_FILE) data/white_list_cert_to_be_verify.bin
 
-$(APPNAME): $(CPPMICROSERVICES) source/build/CMakeCache.txt urts RDRAND
+$(APPNAME): source/build/CMakeCache.txt urts RDRAND
 	$(MAKE) -C source/build
-	$(CP) $(CPPMICROSERVICES) source/build/bin/
 
 CMAKE_VERSION_MAJOR=$(shell cmake --version | head -n  1 | cut -d \  -f 3 | cut -d . -f 1)
 CMAKE_VERSION_MINOR=$(shell cmake --version | head -n  1 | cut -d \  -f 3 | cut -d . -f 2 | xargs printf '%02d')
 CMAKE_VERSION=$(CMAKE_VERSION_MAJOR)$(CMAKE_VERSION_MINOR)
 CMAKE := $(HOME)/cache/bin/cmake
 
-.PHONY: CPPMICROSERVICES
-$(CPPMICROSERVICES):
-	mkdir -p $(CPPMICROSERVICES_DIR)/build
-ifeq ($(shell test $(CMAKE_VERSION) -lt 302 && echo 1), 1)
-	$(CPPMICROSERVICES_DIR)/install_cmake.sh
-	cd $(CPPMICROSERVICES_DIR)/build && $(CMAKE) -DCMAKE_COMMAND=$(CMAKE) $(CPPMICROSERVICES_CONFIG) ../ && $(MAKE) && $(MAKE) install
-else
-	cd $(CPPMICROSERVICES_DIR)/build && cmake $(CPPMICROSERVICES_CONFIG) ../ && $(MAKE) && $(MAKE) install
-endif
-
-source/build/CMakeCache.txt: $(CPPMICROSERVICES)
+source/build/CMakeCache.txt:
 ifeq ($(shell test $(CMAKE_VERSION) -lt 300 && echo 1), 1)
 	mkdir -p source/build && cd source/build && $(CMAKE) -DCMAKE_COMMAND=$(CMAKE) $(AESM_CONFIG) ../
 else
@@ -121,8 +106,6 @@ $(BUILD_DIR):
 .PHONY: clean
 clean:
 	@$(RM) -r source/build
-	@$(RM) -r $(CPPMICROSERVICES_DIR)/build
-	@$(RM) -r $(CPPMICROSERVICES_INSTALL)
 	@$(RM) -r data
 ifeq ($(RDRAND_MAKEFILE), $(wildcard $(RDRAND_MAKEFILE)))
 	@$(MAKE) distclean -C $(RDRAND_LIBDIR)

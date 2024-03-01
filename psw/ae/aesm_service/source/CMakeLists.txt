@@ -46,7 +46,7 @@ else()
 endif()
 
 # check if CppMicroServices was found
-set(CppMicroServices_DIR ../../../../external/CppMicroServices/local-install/share/cppmicroservices4/cmake)
+set(CppMicroServices_DIR ${CPPMICROSERVICES_CMAKE})
 find_package(CppMicroServices NO_MODULE REQUIRED)
 cmake_minimum_required(VERSION ${US_CMAKE_MINIMUM_REQUIRED_VERSION})
 cmake_policy(VERSION ${US_CMAKE_MINIMUM_REQUIRED_VERSION})
@@ -64,7 +64,7 @@ if(SGX_DISABLE_PSE)
 endif()
 
 set(CMAKE_CXX_STANDARD_REQUIRED 1)
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_SKIP_BUILD_RPATH true)
 
 ########## SGX SDK Settings ##########
@@ -169,6 +169,6 @@ ADD_SUBDIRECTORY(oal)
 ADD_SUBDIRECTORY(utils)
 ADD_SUBDIRECTORY(core)
 ADD_SUBDIRECTORY(bundles)
-ADD_SUBDIRECTORY(qcnl)
-ADD_SUBDIRECTORY(qpl)
-ADD_SUBDIRECTORY(qcnl/pck_cert_selection)
+#ADD_SUBDIRECTORY(qcnl)
+#ADD_SUBDIRECTORY(qpl)
+#ADD_SUBDIRECTORY(qcnl/pck_cert_selection)
