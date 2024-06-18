@@ -85,13 +85,6 @@ build_ipp: $(CHECK_SOURCE)
 	cd $(IPP_SOURCE) && $(PRE_CONFIG) cmake CMakeLists.txt $(IPP_CONFIG) && cd build && make ippcp_s
 
 $(IPP_SOURCE)/build:
-## Need to enable below code when release
-#ifeq ($(shell git rev-parse --is-inside-work-tree), true)
-#	git submodule update -f --init --recursive --remote -- $(IPP_SOURCE)
-#else
-	$(RM) -rf $(IPP_SOURCE)
-	git clone -b ipp-crypto_2021_11_0 https://github.com/intel/ipp-crypto.git --depth 1 $(IPP_SOURCE)
-#endif
 	mkdir -p $(IPP_SOURCE)/build
 
 .PHONY: clean
