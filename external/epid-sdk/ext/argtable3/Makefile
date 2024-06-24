@@ -6,7 +6,7 @@ ARGTABLE_OBJ = $(sort $(ARGTABLE_SRC:.c=.o))
 ARGTABLE_LIB = libargtable3.a
 
 $(ARGTABLE_OBJ): %.o: %.c
-	$(CC) -o $@ -c $(CFLAGS) $<
+	$(CC) -o $@ -c $(CFLAGS) -Wno-stringop-overflow $<
 
 $(ARGTABLE_LIB): $(ARGTABLE_OBJ)
 	$(AR) rc $@ $^
