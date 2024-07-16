@@ -52,6 +52,7 @@ IPP_CONFIG += -DCMAKE_CXX_FLAGS="$(ENC_CXXFLAGS)"
 IPP_CONFIG += -DSGX_PROGRAM_SEARCH_PATH="$(EXT_BINUTILS_DIR)"
 
 SUB_DIR = no_mitigation
+PRE_CONFIG= ASM_NASM="python $(DIR)/../../build-scripts/sgx-asm-pp.py --assembler=nasm --MITIGATION-CVE-2020-0551=NONE"
 ifeq ($(MITIGATION-CVE-2020-0551), LOAD)
 	SUB_DIR = cve_2020_0551_load
 	PRE_CONFIG= ASM_NASM="python $(DIR)/../../build-scripts/sgx-asm-pp.py --assembler=nasm --MITIGATION-CVE-2020-0551=LOAD"
