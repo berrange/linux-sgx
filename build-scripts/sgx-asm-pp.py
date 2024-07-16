@@ -334,4 +334,18 @@ if __name__ == '__main__':
     if errno != 0:
         print ('compile failed, file %s' %(get_mitigated_file(src_file)))
         sys.exit(errno)
+
+    dst_index = get_dst_index(options)
+    obj_file = ops[dst_index]
+    munge_cmd = os.environ.get("SGX_MUNGE_ASM_OBJ", None)
+    if munge_cmd is None:
+        print ('No SGX_MUNGE_ASM_OBJ env, skipping post-processing')
+        sys.exit(0)
+
+    munge_cmd = munge_cmd + ' ' + obj_file
+    errno = os.system(munge_cmd)
+    if errno != 0:
+        print ('munge failed: %s' % munge_cmd)
+        sys.exit(errno)
+
     sys.exit(0)
