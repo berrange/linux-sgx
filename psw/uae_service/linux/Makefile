@@ -143,7 +143,7 @@ libsgx_%.so: $(OBJ) %_version.o
 	$(CXX) $(CXXFLAGS) $^ -shared $(LDUFLAGS) -Wl,--version-script=$(@:.so=.lds) -Wl,--gc-sections $(EXTERNAL_LIB) -Wl,-soname=$@.$(call get_major_version,$(call get_version_name,$@)) -o $@
 
 $(LEGACY_LIBNAME): $(LEGACY_OBJ)
-	$(CXX) $(CXXFLAGS) $^ -shared $(LDUFLAGS) -ldl -Wl,--version-script=uae_service.lds -Wl,--gc-sections -Wl,-soname=$@ -o $@
+	$(CXX) $(CXXFLAGS) $^ -shared $(LDUFLAGS) -ldl -Wl,--version-script=uae_service.lds -Wl,--gc-sections -Wl,-soname=$@.$(call get_major_version,$(call get_version_name,$@)) -o $@
 
 $(IPC_SRC:.cpp=.o) : $(IPC_COMMON_PROTO_DIR)/messages.pb.cc
 AEServicesImpl.o : $(IPC_COMMON_PROTO_DIR)/messages.pb.cc
