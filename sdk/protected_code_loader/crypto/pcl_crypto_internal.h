@@ -36,9 +36,6 @@
 
 extern "C" 
 {	
-#else // Not C++, must define bool:
-
-typedef unsigned int bool;
 
 #endif // #ifdef __cplusplus
 
@@ -106,7 +103,7 @@ void pcl_vpaes_cbc_encrypt(
             size_t len, 
             AES_KEY* wide_key_p, 
             uint8_t* iv, 
-            bool encrypt);
+            int encrypt);
 
 #endif // #ifdef SE_SIM 
 
