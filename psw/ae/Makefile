@@ -45,7 +45,7 @@ CHECK_PREBUILT := prebuilt_check_fail
 endif
 
 .PHONY: all
-all: $(CMAKE_RESULT) AESM COPY_AES| $(BUILD_DIR)
+all: $(CMAKE_RESULT) COPY_AES| $(BUILD_DIR)
 
 # COPY_AES: currently copy le, pce, qe3
 .PHONY: COPY_AES
