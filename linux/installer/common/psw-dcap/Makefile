@@ -147,13 +147,7 @@ post_$(1): $(1) | $(PACKAGE_ROOT_PATH)
 	cp -fr $$|/$$</* $(DESTDIR)/$$< ) ||:
 endef
 
-AESM_SERVICE_PKGS:= $(AESM_PCE_PACKAGE)      \
-                    $(AESM_EPID_PACKAGE)     \
-                    $(AESM_ECDSA_PACKAGE)    \
-                    $(AESM_LAUNCH_PACKAGE)   \
-                    $(AESM_QUOTE_EX_PACKAGE) \
-                    $(AESM_SERVICE_PACKAGE)  \
-                    $(QE3_LOGIC_PACKAGE)     \
+AESM_SERVICE_PKGS:= $(QE3_LOGIC_PACKAGE)     \
                     $(PCE_LOGIC_PACKAGE)
 
 AE_PKGS:= $(AE_EPID_PACKAGE)                 \
@@ -197,25 +191,6 @@ PHONY+=$(foreach PKG,$(ALL_PKGS),post_$(PKG))
 
 PHONY+=install_$(AESM_SERVICE_PACKAGE)
 install_$(AESM_SERVICE_PACKAGE): $(foreach PKG,$(AESM_SERVICE_PKGS),post_$(PKG))
-	install -d $(shell readlink -m $(DESTDIR)/$(AESM_SERVICE_PACKAGE)/$(VAR_OPT_PATH))
-	install -d $(shell readlink -m $(DESTDIR)/$(AESM_SERVICE_PACKAGE)/$(AESMD_CONF_PATH))
-	sed -e "s:@aesm_folder@:$(SGX_INSTALL_PATH)/$(AESM_SERVICE_PACKAGE)/aesm:"                                   \
-		$(DESTDIR)/$(AESM_SERVICE_PACKAGE)/$(SGX_INSTALL_PATH)/$(AESM_SERVICE_PACKAGE)/aesm/$(AESMD_CONF)    \
-		> $(DESTDIR)/$(AESM_SERVICE_PACKAGE)/$(AESMD_CONF_PATH)/$(AESMD_CONF)
-	rm -f $(DESTDIR)/$(AESM_SERVICE_PACKAGE)/$(SGX_INSTALL_PATH)/$(AESM_SERVICE_PACKAGE)/aesm/$(AESMD_CONF)
-	rm -f $(DESTDIR)/$(AESM_SERVICE_PACKAGE)/$(SGX_INSTALL_PATH)/$(AESM_SERVICE_PACKAGE)/aesm/$(AESMD_CONF_DEL)
-	$(if $(wildcard $(DESTDIR)/$(AESM_SERVICE_PACKAGE)/$(SGX_INSTALL_PATH)/$(AESM_SERVICE_PACKAGE)/aesm/conf/*), \
-		install -d $(shell readlink -m $(DESTDIR)/$(AESM_SERVICE_PACKAGE)/$(ETC_DIR))                     && \
-		cp -fr $(DESTDIR)/$(AESM_SERVICE_PACKAGE)/$(SGX_INSTALL_PATH)/$(AESM_SERVICE_PACKAGE)/aesm/conf/*    \
-			$(DESTDIR)/$(AESM_SERVICE_PACKAGE)/$(ETC_DIR)                                             && \
-		rm -fr $(DESTDIR)/$(AESM_SERVICE_PACKAGE)/$(SGX_INSTALL_PATH)/$(AESM_SERVICE_PACKAGE)/aesm/conf)
-	cd $(shell readlink -m $(DESTDIR)/$(AESM_ECDSA_PACKAGE)/$(SGX_INSTALL_PATH)/$(AESM_SERVICE_PACKAGE)/aesm) && \
-	ln -fs $(shell readlink -m $(USR_LIB_PATH)/libsgx_qe3.signed.so.$(QE3_MAJOR_VER))                         && \
-	ln -fs $(shell readlink -m $(USR_LIB_PATH)/libsgx_qe3.signed.so)
-	cd $(shell readlink -m $(DESTDIR)/$(AESM_PCE_PACKAGE)/$(SGX_INSTALL_PATH)/$(AESM_SERVICE_PACKAGE)/aesm)   && \
-	ln -fs $(shell readlink -m $(USR_LIB_PATH)/libsgx_pce.signed.so.$(PCE_MAJOR_VER))                         && \
-	ln -fs $(shell readlink -m $(USR_LIB_PATH)/libsgx_pce.signed.so)                                          && \
-	ln -fs liburts_internal.so libsgx_urts.so.$(URTS_MAJOR_VER)
 
 PHONY+=$(RA_SERVICE_PACKAGE)
 $(RA_SERVICE_PACKAGE): pre_$(RA_SERVICE_PACKAGE) | $(PACKAGE_ROOT_PATH)
