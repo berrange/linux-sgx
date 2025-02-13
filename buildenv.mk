@@ -336,3 +336,16 @@ else
     SGX_LIB_DIR := $(SGX_SDK)/lib64/$(MITIGATION_LIB_PATH)
     SGX_BIN_DIR := $(SGX_SDK)/bin/x64
 endif
+
+USE_HOST_OPENSSL_CRYPTO ?= 0
+
+ifeq ($(USE_HOST_OPENSSL_CRYPTO), 1)
+OPENSSL_CRYPTO_CFLAGS = $(shell pkg-config --cflags libcrypto)
+OPENSSL_CRYPTO_LDFLAGS = $(shell pkg-config --libs libcrypto)
+OPENSSL_CRYPTO_LIBS = $(shell pkg-config --libs libcrypto)
+else
+OPENSSL_CRYPTO_PREBUILT_DIR := $(LINUX_EXTERNAL_DIR)/dcap_source/prebuilt/openssl
+OPENSSL_CRYPTO_CFLAGS = -I$(OPENSSL_CRYPTO_PREBUILT_DIR)/inc
+OPENSSL_CRYPTO_LDFLAGS = -L$(OPENSSL_CRYPTO_PREBUILT_DIR)/lib/linux64 -lcrypto
+OPENSSL_CRYPTO_LIBS = $(OPENSSL_CRYPTO_PREBUILT_DIR)/lib/linux64/libcrypto.a
+endif
