@@ -42,9 +42,6 @@ endif
 CXXFLAGS += -fPIC -DSE_SIM -Werror -g $(CET_FLAGS)
 CFLAGS   += -fPIC -DSE_SIM -Werror -g $(CET_FLAGS)
 
-PREBUILT_OPENSSL_DIR := $(LINUX_EXTERNAL_DIR)/dcap_source/prebuilt/openssl
-CRYPTO_LIB := -L$(PREBUILT_OPENSSL_DIR)/lib/linux64 -lcrypto
-
 CPPFLAGS += $(ADDED_INC) #for ubuntu 11 and later version
 CPPFLAGS += -I$(COMMON_DIR)/inc                \
             -I$(COMMON_DIR)/inc/internal/linux \
@@ -53,7 +50,7 @@ CPPFLAGS += -I$(COMMON_DIR)/inc                \
             -I$(LINUX_PSW_DIR)/urts/parser     \
             -I$(VTUNE_DIR)/include \
             -I$(VTUNE_DIR)/sdk/src/ittnotify \
-            -I$(PREBUILT_OPENSSL_DIR)/inc
+            $(OPENSSL_CRYPTO_CFLAGS)
 
 CPPFLAGS += -I$(COMMON_DIR)/inc/internal      \
             -I$(LINUX_PSW_DIR)/urts/linux     \
@@ -127,7 +124,7 @@ LDFLAGS += $(COMMON_LDFLAGS) -Wl,--version-script=$(LINUX_PSW_DIR)/urts/linux/ur
 LIBURTSSIM_SHARED := libsgx_urts_sim.so
 LIBURTS_DEPLOY := libsgx_urts_deploy.so
 
-LDLIBS += -lwrapper $(CRYPTO_LIB) -Wl,-Bdynamic -Wl,-Bsymbolic -lsgx_uae_service_sim
+LDLIBS += -lwrapper $(OPENSSL_CRYPTO_LDFLAGS) -Wl,-Bdynamic -Wl,-Bsymbolic -lsgx_uae_service_sim
 SONAME = $(LIBURTSSIM_SHARED)
 
 .PHONY: all
