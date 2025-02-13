@@ -46,7 +46,7 @@ else()
 endif()
 
 # check if CppMicroServices was found
-set(CppMicroServices_DIR ../../../../external/CppMicroServices/local-install/share/cppmicroservices4/cmake)
+set(CppMicroServices_DIR ${CPPMICROSERVICES_CMAKE_DIR})
 find_package(CppMicroServices NO_MODULE REQUIRED)
 cmake_minimum_required(VERSION ${US_CMAKE_MINIMUM_REQUIRED_VERSION})
 cmake_policy(VERSION ${US_CMAKE_MINIMUM_REQUIRED_VERSION})
