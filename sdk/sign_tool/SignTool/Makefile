@@ -24,11 +24,11 @@ INC +=  -I$(COMMON_DIR)/inc                         \
         -I$(LINUX_PSW_DIR)/enclave_common           \
         -I$(LINUX_PSW_DIR)/urts                     \
         -I$(LINUX_PSW_DIR)/urts/linux               \
-        -I$(LINUX_EXTERNAL_DIR)/tinyxml2            \
+        $(TINYXML2_CFLAGS)                          \
         -I$(LINUX_PSW_DIR)/urts/parser              \
         $(OPENSSL_CRYPTO_CFLAGS)
 
-DIR1 := $(LINUX_EXTERNAL_DIR)/tinyxml2/
+DIR1 := $(TINYXML2_DIR)
 DIR2 := $(COMMON_DIR)/src/
 DIR3 := $(LINUX_PSW_DIR)/urts/
 DIR4 := $(LINUX_PSW_DIR)/urts/linux
@@ -43,7 +43,7 @@ OBJ1 := manage_metadata.o      \
 
 OBJ2 := sgx_memset_s.o crypto_evp_digest.o crypto_rsa_key.o crypto_rsa3072.o
 
-OBJ3 := tinyxml2.o
+OBJ3 := $(TINYXML2_OBJ)
 
 OBJ4 := loader.o     \
         se_detect.o  \
@@ -62,7 +62,7 @@ all: sgx_sign | $(BUILD_DIR)
 $(BUILD_DIR):
 	@$(MKDIR) $@
 
-sgx_sign: PRIVATE_LDLIBS  := -lpthread -lenclaveparser $(OPENSSL_CRYPTO_LDFLAGS) -ldl
+sgx_sign: PRIVATE_LDLIBS  := -lpthread -lenclaveparser $(OPENSSL_CRYPTO_LDFLAGS) -ldl $(TINYXML2_LDFLAGS)
 sgx_sign: PRIVATE_LDFLAGS := -L$(LINUX_PSW_DIR)/urts/parser $(LDFLAGS)
 
 sgx_sign: $(OBJS) enclaveparser
