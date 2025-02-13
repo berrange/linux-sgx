@@ -33,6 +33,8 @@ include ../../buildenv.mk
 
 DIR = $(CURDIR)
 
+IPP_USE_GIT := 1
+
 IPP_CONFIG = -Bbuild -DCMAKE_VERBOSE_MAKEFILE=on
 
 # Ignore the CMAKE C/C++ compiler check to avoid conflicts with mitigation options
@@ -85,6 +87,7 @@ build_ipp: $(CHECK_SOURCE)
 	cd $(IPP_SOURCE) && $(PRE_CONFIG) cmake CMakeLists.txt $(IPP_CONFIG) && cd build && make ippcp_s
 
 $(IPP_SOURCE)/build:
+ifeq ($(IPP_USE_GIT), 1)
 ifeq ($(shell git rev-parse --is-inside-work-tree), true)
 	git submodule update -f --init --recursive --remote -- $(IPP_SOURCE)
 else
@@ -92,6 +95,7 @@ else
 	git clone -b ipp-crypto_2021_12_1 https://github.com/intel/ipp-crypto.git --depth 1 $(IPP_SOURCE)
 endif
 	cd $(IPP_SOURCE) && git apply ../0001-IPP-crypto-for-SGX.patch
+endif
 	mkdir -p $(IPP_SOURCE)/build
 
 .PHONY: clean
