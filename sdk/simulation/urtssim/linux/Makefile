@@ -65,9 +65,9 @@ DIR5 := $(LINUX_PSW_DIR)/../common/src/linux
 DIR6 := $(LINUX_PSW_DIR)/../common/src
 
 
-LDFLAGS += -L$(COMMON_DIR)/se_wrapper \
+LDUFLAGS += -L$(COMMON_DIR)/se_wrapper \
            -L$(SIM_DIR)/uae_service_sim/linux
-LDFLAGS += -L$(VTUNE_DIR)/sdk/src/ittnotify/ -littnotify -ldl -lpthread
+LDUFLAGS += -L$(VTUNE_DIR)/sdk/src/ittnotify/ -littnotify -ldl -lpthread
 
 OBJ1 := enclave.o         \
         tcs.o             \
@@ -119,7 +119,7 @@ vpath %.cpp .:$(DIR1):$(DIR2):$(DIR3):$(DIR4):$(DIR6)
 vpath %.S   .:$(DIR2):$(DIR5)
 vpath %.c .:$(DIR6)
 
-LDFLAGS += $(COMMON_LDFLAGS) -Wl,--version-script=$(LINUX_PSW_DIR)/urts/linux/urts.lds
+LDUFLAGS += $(COMMON_LDFLAGS) -Wl,--version-script=$(LINUX_PSW_DIR)/urts/linux/urts.lds
 
 LIBURTSSIM_SHARED := libsgx_urts_sim.so
 LIBURTS_DEPLOY := libsgx_urts_deploy.so
@@ -133,7 +133,7 @@ all: $(LIBURTSSIM_SHARED) $(LIBURTS_DEPLOY)| $(BUILD_DIR)
 	$(CP) $(LIBURTS_DEPLOY) $|
 
 $(LIBURTSSIM_SHARED): simasm uinst driver_api wrapper uae_service_sim $(OBJ) $(OBJ6) ittnotify
-	$(CXX) $(CXXFLAGS) -shared -Wl,-soname=$(SONAME) $(OBJ) $(OBJ6) $(LDFLAGS) $(LDLIBS) -o $@
+	$(CXX) $(CXXFLAGS) -shared -Wl,-soname=$(SONAME) $(OBJ) $(OBJ6) $(LDUFLAGS) $(LDLIBS) -o $@
 
 $(BUILD_DIR):
 	@$(MKDIR) $@
