@@ -71,7 +71,7 @@ all: $(APPNAME) $(APPNAME_DEBUG) | $(BUILD_DIR)
 	$(CP) -r source/build/bin/* $|
 
 $(APPNAME): $(CPPMICROSERVICES) source/build/CMakeCache.txt urts RDRAND
-	$(MAKE) -C source/build
+	$(MAKE) -C source/build VERBOSE=1
 ifeq ($(USE_HOST_CPPMICROSERVICES), 0)
 	$(CP) $(CPPMICROSERVICES) source/build/bin/
 endif
