@@ -15,7 +15,7 @@ FLAGS += -DSE_DEBUG_LEVEL=SE_TRACE_ERROR
 endif
 CFLAGS += $(FLAGS)
 CXXFLAGS += $(FLAGS)
-LDFLAGS := -pie $(COMMON_LDFLAGS) -Wno-odr
+LDFLAGS += -pie $(COMMON_LDFLAGS) -Wno-odr
 
 INC += $(ADDED_INC)
 INC +=  -I$(COMMON_DIR)/inc                         \

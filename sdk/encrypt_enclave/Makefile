@@ -13,7 +13,7 @@ endif
 
 INC_DIR	:= -I$(COMMON_DIR)/inc -I$(COMMON_DIR)/inc/internal -I.
 CXXFLAGS += $(INC_DIR) -Wno-attributes -g -mrdrnd -fpie -Werror=format-security
-LDFLAGS := -pie $(COMMON_LDFLAGS)
+LDFLAGS += -pie $(COMMON_LDFLAGS)
 
 LINK_FLAGS := -lcrypto -L$(BUILD_DIR) -lsgx_tservice
 CPP_FILES := encryptip.cpp

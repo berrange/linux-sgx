@@ -45,7 +45,7 @@ SRCS += $(SIM_DIR)/urtssim/cpusvn_util.cpp
 OBJS := $(sort $(SRCS:.cpp=.o))
 
 WRAPPER_LIB_DIR := $(COMMON_DIR)/se_wrapper
-LDFLAGS := -L$(WRAPPER_LIB_DIR)
+LDFLAGS += -L$(WRAPPER_LIB_DIR)
 CXXFLAGS += -fpie $(CET_FLAGS)
 LDFLAGS += -pie $(COMMON_LDFLAGS)
 LDLIBS  := -lwrapper
