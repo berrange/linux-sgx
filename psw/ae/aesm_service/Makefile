@@ -80,7 +80,7 @@ copy_data_file:
 	@$(CP) $(WHITE_LIST_FILE) data/white_list_cert_to_be_verify.bin
 
 $(APPNAME): $(CPPMICROSERVICES) source/build/CMakeCache.txt urts RDRAND
-	$(MAKE) -C source/build
+	$(MAKE) -C source/build VERBOSE=1
 ifeq ($(USE_HOST_CPPMICROSERVICES), 0)
 	$(CP) $(CPPMICROSERVICES) source/build/bin/
 endif
