@@ -31,13 +31,10 @@
 
 include ../../../buildenv.mk
 
-#Don't CFLAGS +=, because it depend on gdb is m32 or m64
-CFLAGS :=
-
 CPPFLAGS += -I$(COMMON_DIR)/inc/           \
             -I$(COMMON_DIR)/inc/internal/
 
-CFLAGS += -W -Wall -Werror -D_GNU_SOURCE -fpic
+CFLAGS += -W -Wall -Werror -D_GNU_SOURCE -fpic -Wno-conversion -Wno-redundant-decls
 ifeq ($(CC_BELOW_4_9), 1)
 	CFLAGS += -fstack-protector
 else
