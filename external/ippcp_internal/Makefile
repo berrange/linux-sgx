@@ -58,10 +58,12 @@ IPP_CONFIG += -DIPPCP_FIPS_MODE=on  -DFIPS_CUSTOM_IPPCP_API_HEADER=$(CURDIR)/inc
 SUB_DIR = no_mitigation
 ifeq ($(MITIGATION-CVE-2020-0551), LOAD)
 	SUB_DIR = cve_2020_0551_load
-	PRE_CONFIG= ASM_NASM="python $(DIR)/../../build-scripts/sgx-asm-pp.py --assembler=nasm --MITIGATION-CVE-2020-0551=LOAD"
+	PRE_CONFIG = ASM_NASM="$(DIR)/../../build-scripts/sgx-nasm.sh"
+        POST_CONFIG = MITIGATION=LOAD
 else ifeq ($(MITIGATION-CVE-2020-0551), CF)
 	SUB_DIR = cve_2020_0551_cf
-	PRE_CONFIG= ASM_NASM="python $(DIR)/../../build-scripts/sgx-asm-pp.py --assembler=nasm --MITIGATION-CVE-2020-0551=CF"
+	PRE_CONFIG = ASM_NASM="$(DIR)/../../build-scripts/sgx-nasm.sh"
+	POST_CONFIG = MITIGATION=CF
 endif
 OUT_DIR = lib/linux/$(ARCH)/$(SUB_DIR)/
 
@@ -84,7 +86,7 @@ all: build_ipp
 	$(CP) ipp-crypto/LICENSE ./license/
 
 build_ipp: $(CHECK_SOURCE)
-	cd $(IPP_SOURCE) && $(PRE_CONFIG) cmake CMakeLists.txt $(IPP_CONFIG) && cd build && make ippcp_s
+	cd $(IPP_SOURCE) && $(PRE_CONFIG) cmake CMakeLists.txt $(IPP_CONFIG) && cd build && $(POST_CONFIG) make ippcp_s
 
 $(IPP_SOURCE)/build:
 ifeq ($(IPP_USE_GIT), 1)
