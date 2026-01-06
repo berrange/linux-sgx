@@ -41,8 +41,8 @@ CPPFLAGS += -I$(COMMON_DIR)/inc/         \
 
 CFLAGS   += $(ENCLAVE_CFLAGS)
 ASFLAGS  := -DSE_SIM -Werror $(CFLAGS)
-CFLAGS   += -DSE_SIM -Werror -fasynchronous-unwind-tables
-CXXFLAGS += -DSE_SIM -Werror $(ENCLAVE_CXXFLAGS)\
+CFLAGS   += -DSE_SIM -Werror -Wno-attributes -fasynchronous-unwind-tables
+CXXFLAGS += -DSE_SIM -Werror -Wno-attributes $(ENCLAVE_CXXFLAGS)\
             -fno-exceptions -fno-rtti
 
 SIM_DIR    := $(CUR_DIR)/../..
