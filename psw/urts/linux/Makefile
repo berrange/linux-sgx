@@ -36,10 +36,10 @@ CXXFLAGS += -DDISABLE_TRACE
 CFLAGS += -DDISABLE_TRACE
 endif
 
-CXXFLAGS += -fPIC -Werror -g
+CXXFLAGS += -fPIC -Werror -Wno-attributes -g
 CXXFLAGS += $(ADDED_INC)
 
-CFLAGS += -fPIC -Werror -g
+CFLAGS += -fPIC -Werror -Wno-attributes -g
 CFLAGS += $(ADDED_INC)
 
 VTUNE_DIR = $(LINUX_EXTERNAL_DIR)/vtune/linux
