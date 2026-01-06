@@ -39,8 +39,8 @@ CXXFLAGS += -DDISABLE_TRACE
 CFLAGS += -DDISABLE_TRACE
 endif
 
-CXXFLAGS += -fPIC -DSE_SIM -Werror -g $(CET_FLAGS)
-CFLAGS   += -fPIC -DSE_SIM -Werror -g $(CET_FLAGS)
+CXXFLAGS += -fPIC -DSE_SIM -Werror -Wno-attributes -g $(CET_FLAGS)
+CFLAGS   += -fPIC -DSE_SIM -Werror -Wno-attributes -g $(CET_FLAGS)
 
 CPPFLAGS += $(ADDED_INC) #for ubuntu 11 and later version
 CPPFLAGS += -I$(COMMON_DIR)/inc                \
