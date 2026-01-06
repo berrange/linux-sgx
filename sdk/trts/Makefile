@@ -14,6 +14,7 @@ CPPFLAGS += -I$(COMMON_DIR)/inc          \
 
 CXXFLAGS += $(ENCLAVE_CXXFLAGS) \
             -Werror         \
+            -Wno-attributes \
             -fno-exceptions \
             -fno-rtti
 

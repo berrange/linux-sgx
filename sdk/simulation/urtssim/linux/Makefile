@@ -39,8 +39,8 @@ CXXFLAGS += -DDISABLE_TRACE
 CFLAGS += -DDISABLE_TRACE
 endif
 
-CXXFLAGS += -fPIC -DSE_SIM -Werror -g $(CET_FLAGS)
-CFLAGS   += -fPIC -DSE_SIM -Werror -g $(CET_FLAGS)
+CXXFLAGS += -fPIC -DSE_SIM -Werror -Wno-attributes -g $(CET_FLAGS)
+CFLAGS   += -fPIC -DSE_SIM -Werror -Wno-attributes -g $(CET_FLAGS)
 
 PREBUILT_OPENSSL_DIR := $(LINUX_EXTERNAL_DIR)/dcap_source/prebuilt/openssl
 CRYPTO_LIB := -L$(PREBUILT_OPENSSL_DIR)/lib/linux64 -lcrypto
