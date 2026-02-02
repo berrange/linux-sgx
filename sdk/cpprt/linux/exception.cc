@@ -1237,6 +1237,13 @@ extern "C" void __cxa_call_unexpected(void*exception)
 	abort();
 }
 
+extern "C" void __cxa_call_terminate(void*exception)
+{
+	std::terminate();
+	// Should not be reached.
+	abort();
+}
+
 /**
  * ABI function, returns the adjusted pointer to the exception object.
  */
