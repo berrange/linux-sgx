@@ -63,7 +63,7 @@ namespace std
 
 #  if  __cplusplus < 201103L
     bool uncaught_exception() throw();
-#  elif __cplusplus <= 201703L
+#  else
     bool uncaught_exception() noexcept;
 #  endif
 
