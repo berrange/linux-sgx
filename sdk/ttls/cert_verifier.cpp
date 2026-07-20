@@ -733,7 +733,7 @@ sgx_status_t sgx_cert_find_extension(
     for (int i = 0; i < num_extensions; i++)
     {
         X509_EXTENSION* ext;
-        ASN1_OBJECT* obj;
+        const ASN1_OBJECT* obj;
         sgx_oid_string_t ext_oid;
 
         /* Get the i-th extension from the stack */
@@ -751,7 +751,7 @@ sgx_status_t sgx_cert_find_extension(
         /* If found then get the data */
         if (strcmp(ext_oid.buf, oid) == 0)
         {
-            ASN1_OCTET_STRING* str;
+            const ASN1_OCTET_STRING* str;
 
             /* Get the data from the extension */
             if (!(str = X509_EXTENSION_get_data(ext)))
@@ -759,8 +759,9 @@ sgx_status_t sgx_cert_find_extension(
 
             if (data)
             {
-                memcpy(data, str->data, (size_t)str->length);
-                *size = (size_t)str->length;
+                const unsigned char *strdata = ASN1_STRING_get0_data(str);
+                *size = (size_t)ASN1_STRING_length(str);
+                memcpy(data, strdata, (size_t)*size);
                 result = SGX_SUCCESS;
                 goto done;
             }
